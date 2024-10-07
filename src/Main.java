@@ -21,7 +21,7 @@ public class Main {
             Map<String, Integer> actionCosts = new HashMap<>();
             for (String pair : costInput.split(",")) {
                 String[] parts = pair.split(":");
-                System.out.println(parts);
+                //System.out.println(parts);
                 if (parts.length == 2) {
                     try {
                         actionCosts.put(parts[0].trim(), Integer.parseInt(parts[1].trim()));
