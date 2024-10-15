@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Enter the search strategy (BF, DF, UC, ID, GR1, GR2, AS1, AS2):");  // Added ID for IDS
         String strategy = scanner.nextLine();
 
-        System.out.println("Enter the cost for each action (e.g., 'pour_0_1:2,pour_0_2:3,pour_1_2:1,pour_1_3:4'):");
+        /*System.out.println("Enter the cost for each action (e.g., 'pour_0_1:2,pour_0_2:3,pour_1_2:1,pour_1_3:4'):");
         String costInput = scanner.nextLine();
 
         // Parse the input into a map with validation
@@ -32,7 +32,7 @@ public class Main {
             } else {
                 System.out.println("Invalid input format for pair: " + pair);
             }
-        }
+        }*/
 
         // Ensure correct input for visualization
         boolean visualize = false;
@@ -51,7 +51,7 @@ public class Main {
         }
 
         // Create an instance of WaterSortSearch and solve the problem
-        WaterSortSearch waterSortSearch = new WaterSortSearch(actionCosts);
+        WaterSortSearch waterSortSearch = new WaterSortSearch();
         String result = waterSortSearch.solve(initialState, strategy, visualize);  // Solve with the chosen strategy
 
         // Display the result

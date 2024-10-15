@@ -5,12 +5,13 @@ import java.util.*;
 
 public class WaterSortSearch extends GenericSearch {
 	private static Map<String, Integer> actionCosts;
-
-    public WaterSortSearch(Map<String, Integer> actionCosts) {
-		// TODO Auto-generated constructor stub
-    	this.actionCosts = actionCosts;
+	private static int cost;
+	
+	public int getcost(){
+		return cost;
 	}
-
+	
+	
 	public static List<String> getActions(String state) {
         List<String> actions = new ArrayList<>();
         // Parse the state to create the list of bottles
@@ -87,23 +88,20 @@ public class WaterSortSearch extends GenericSearch {
     }
 
 
-
-
-    // Breadth-First Search (BFS)
+ // Breadth-First Search (BFS)
     private static String breadthFirstSearch(String initialState, boolean visualize) {
         Queue<Node> frontier = new LinkedList<>();
         Set<String> explored = new HashSet<>();
-        int nodesExpanded = 0;  // This counts all nodes expanded during the search
+        int nodesExpanded = 0;  // Count of expanded nodes
 
         Node root = new Node(initialState, null, null, 0);
         frontier.add(root);
 
         while (!frontier.isEmpty()) {
             Node node = frontier.poll();
-            nodesExpanded++;  // Increment the nodes expanded when a node is removed from the frontier
+            nodesExpanded++;
 
             if (goalTest(node.state)) {
-                // Return the solution with plan, path cost, and nodes expanded
                 return constructSolution(node, nodesExpanded);
             }
 
@@ -125,6 +123,7 @@ public class WaterSortSearch extends GenericSearch {
 
         return "NO_SOLUTION;" + nodesExpanded;
     }
+
 
     // Depth-First Search (DFS)
     private static String depthFirstSearch(String initialState, boolean visualize) {
@@ -185,7 +184,8 @@ public class WaterSortSearch extends GenericSearch {
 
             for (String action : getActions(node.state)) {
                 String newState = applyAction(node.state, action);
-                int actionCost = getActionCost(action);
+                int actionCost = cost;
+                System.out.println(actionCost+"gtvfdg");
 
                 if (!explored.contains(newState) && !stateInQueue(frontier, newState)) {
                     Node child = new Node(newState, node, action, node.pathCost + actionCost);
@@ -226,7 +226,6 @@ public class WaterSortSearch extends GenericSearch {
         return bottles;
     }
 
-    // Function to apply an action and return the new state
     private static String applyAction(String state, String action) {
         String[] parts = state.split(";");
         int numBottles = Integer.parseInt(parts[0]);
@@ -234,14 +233,25 @@ public class WaterSortSearch extends GenericSearch {
         List<Bottle> bottles = parseBottles(parts, numBottles, bottleCapacity);
 
         String[] actionParts = action.split("_");
-        int from = Integer.parseInt(actionParts[1]);
-        int to = Integer.parseInt(actionParts[2]);
-
-        bottles.get(from).pourInto(bottles.get(to));
+        int from = Integer.parseInt(actionParts[1]);  // Bottle to pour from
+        int to = Integer.parseInt(actionParts[2]);    // Bottle to pour into
+        
+        // Only apply the action if it's valid
+        if (bottles.get(from).canPourInto(bottles.get(to))) {
+            //bottles.get(from).pourInto(bottles.get(to));  // Pour from one bottle to another
+            //actionCosts.put(action, bottles.get(from).pourInto(bottles.get(to)));
+            cost = bottles.get(from).pourInto(bottles.get(to));
+            System.out.println(cost+"test");
+        }
+        
+        
 
         // Convert the list of bottles back to state string
         return numBottles + ";" + bottleCapacity + ";" + bottlesToStateString(bottles);
     }
+
+
+
 
     // Function to convert a list of bottles back to a state string
     private static String bottlesToStateString(List<Bottle> bottles) {
